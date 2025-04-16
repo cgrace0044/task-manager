@@ -1,3 +1,4 @@
+
 from flask import render_template, request, redirect, url_for
 from taskmanager import app, db
 from taskmanager.models import Category, Task
@@ -72,3 +73,11 @@ def edit_task(task_id):
         task.category_id = request.form.get("category_id")
         db.session.commit()
     return render_template("edit_task.html", task=task, categories=categories)
+
+
+@app.route("/delete_task/<int:task_id>")
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for("home"))
